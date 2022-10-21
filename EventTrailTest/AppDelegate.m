@@ -6,6 +6,8 @@
 //
 
 #import "AppDelegate.h"
+#import "EventTrail/MMTrailEvent.h"
+#import "EventTrail/MMAppSession.h"
 
 @interface AppDelegate ()
 
@@ -15,6 +17,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+     
+    
+    NSLog(@"AppSession: %@", [MMAppSession getCurrentAppSession]);
+    
+     
     // Override point for customization after application launch.
     return YES;
 }
