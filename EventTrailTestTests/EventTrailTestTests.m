@@ -23,8 +23,8 @@
     self->trailManager = [MMTrailManager new];
     self->store = [MMSqliteEventTrailStore new];
     
-    [self->store clearAllTrails];
-    [self->store clearAllEvents];
+    [self->store deleteAllTrails];
+    [self->store deleteAllEvents];
 }
 
 - (void)tearDown {
@@ -70,6 +70,26 @@
         
         if ([result isMemberOfClass:[SqliteExecutionSuccess class]]) {
             NSLog(@"[TrailEvent] save event successfully - id: %@ | trailId: %@ | eventName: %@ ", event.eventId, event.trailId, event.eventName);
+        }
+    }
+}
+
+- (void)testQueryAllTrails {
+    [self testSaveTrail];
+    
+    id<SqliteExecutionResult> result = [self->store queryAllTrails];
+    
+    if ([result isMemberOfClass:[SqliteExecutionFailure class]]) {
+        SqliteExecutionFailure *resultFailure = (SqliteExecutionFailure *) result;
+        NSString *errorString = [NSString stringWithFormat:@"Error: %@",resultFailure.exception.reason];
+        NSLog(@"%@", errorString);
+        XCTFail();
+    }
+    
+    if ([result isMemberOfClass:[SqliteTrailQuerySuccess class]]) {
+        SqliteTrailQuerySuccess *resultSuccess = (SqliteTrailQuerySuccess *)result;
+        for (MMTrail *trail in resultSuccess.data) {
+            NSLog(@"[TrailEvent] queried trail: %@ - %@ - %ld", trail.trailId, trail.trailSession, (long)trail.level);
         }
     }
 }

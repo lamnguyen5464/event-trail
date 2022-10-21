@@ -75,30 +75,70 @@
 }
 
 - (id<SqliteExecutionResult>)queryEventsNotInSessionIds:(NSArray<NSString *> *)sessionIds {
-    return nil;
+    NSMutableArray<NSString *> *parsedSessionIds = [NSMutableArray new];
+     
+    for (NSString *sessionId in sessionIds) {
+        [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
+    }
+    
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session NOT IN (%@)", [parsedSessionIds componentsJoinedByString:@", "]];
+    
+    return [self queryEventsByStatement:querySQLString];
+}
+
+
+- (id<SqliteExecutionResult>)queryAllEvents {
+    return [self queryEventsByStatement:@"SELECT * FROM TRAIL_EVENTS"];
+    
+}
+- (id<SqliteExecutionResult>)queryAllTrails {
+    return [self queryTrailsByStatement:@"SELECT TRAILS.id, TRAILS.trail_id,  TRAILS.trail_session, TRAILS.tracking_session_id, TRAILS.app_id, TRAILS.level, TRAILS.entry_scope, TRAILS.entry_type, TRAILS.entry_app_id_trigger, TRAILS.entry_screen_name, TRAILS.entry_parent_trail_id, TRAILS.exit_by, TRAILS.exit_screen FROM TRAILS;"];
 }
 
 
 - (id<SqliteExecutionResult>)deleteEventsByEventIds:(NSArray<NSString *> *)eventIds {
-    return nil;
+    NSMutableArray<NSString *> *parsedEventIds = [NSMutableArray new];
+     
+    for (NSString *eventId in eventIds) {
+        [parsedEventIds addObject:[NSString stringWithFormat:@"'%@'", eventId]];
+    }
+    
+    NSString *deleteSQLString = [NSString stringWithFormat:@"DELETE FROM TRAIL_EVENTS WHERE event_id IN (%@);", [parsedEventIds componentsJoinedByString:@", "]];
+    
+    return [self deleteByStatement:deleteSQLString];
 }
 - (id<SqliteExecutionResult>)deleteEventsByTrailIds:(NSArray<NSString *> *)trailIds {
-    return nil;
+    NSMutableArray<NSString *> *parsedTrailIds = [NSMutableArray new];
+     
+    for (NSString *trailId in trailIds) {
+        [parsedTrailIds addObject:[NSString stringWithFormat:@"'%@'", trailId]];
+    }
+    
+    NSString *deleteSQLString = [NSString stringWithFormat:@"DELETE FROM TRAIL_EVENTS WHERE trail_id IN (%@);", [parsedTrailIds componentsJoinedByString:@", "]];
+    
+    return [self deleteByStatement:deleteSQLString];
 }
 - (id<SqliteExecutionResult>)deleteTrailsByTrailIds:(NSArray<NSString *> *)trailIds {
-    return nil;
+    NSMutableArray<NSString *> *parsedTrailIds = [NSMutableArray new];
+     
+    for (NSString *trailId in trailIds) {
+        [parsedTrailIds addObject:[NSString stringWithFormat:@"'%@'", trailId]];
+    }
+    
+    NSString *deleteSQLString = [NSString stringWithFormat:@"DELETE FROM TRAILS WHERE trail_id IN (%@);", [parsedTrailIds componentsJoinedByString:@", "]];
+    
+    return [self deleteByStatement:deleteSQLString];
 }
 
-- (id<SqliteExecutionResult>)clearAllEvents {
-    return [self clearByStatement:[NSString stringWithFormat:@"DELETE FROM TRAIL_EVENTS;"]];
+- (id<SqliteExecutionResult>)deleteAllEvents {
+    return [self deleteByStatement:[NSString stringWithFormat:@"DELETE FROM TRAIL_EVENTS;"]];
 }
-- (id<SqliteExecutionResult>)clearAllTrails {
-    return [self clearByStatement:[NSString stringWithFormat:@"DELETE FROM TRAILS;"]];
+- (id<SqliteExecutionResult>)deleteAllTrails {
+    return [self deleteByStatement:[NSString stringWithFormat:@"DELETE FROM TRAILS;"]];
 }
 
 
 #pragma mark -
-
 - (id<SqliteExecutionResult>)queryEventsByStatement:(NSString *)querySQLString {
     const char* querySQL = [querySQLString UTF8String];
     sqlite3_stmt *queryStmt = nil;
@@ -122,7 +162,37 @@
     return result;
 }
 
-- (id<SqliteExecutionResult>)clearByStatement:(NSString *)statement {
+- (id<SqliteExecutionResult>)queryTrailsByStatement:(NSString *)querySQLString {
+    const char* querySQL = [querySQLString UTF8String];
+    sqlite3_stmt *queryStmt = nil;
+    id<SqliteExecutionResult> result;
+    if (sqlite3_prepare_v2(self->database, querySQL, -1, &queryStmt, nil) == SQLITE_OK) {
+        NSMutableArray<MMTrail *> *listTrails = [NSMutableArray new];
+        while (sqlite3_step(queryStmt) == SQLITE_ROW) {
+            MMTrail *trail = [MMTrail new];
+            trail.trailId = [self convertFrom:sqlite3_column_text(queryStmt, 1)];
+            trail.trailSession = [self convertFrom:sqlite3_column_text(queryStmt, 2)];
+            trail.trackingSessionId = [self convertFrom:sqlite3_column_text(queryStmt, 3)];
+            trail.appId = [self convertFrom:sqlite3_column_text(queryStmt, 4)];
+            trail.level = sqlite3_column_int(queryStmt, 5);
+            trail.entryScope = [self convertFrom:sqlite3_column_text(queryStmt, 6)];
+            trail.entryType = [self convertFrom:sqlite3_column_text(queryStmt, 7)];
+            trail.entryAppIdTrigger = [self convertFrom:sqlite3_column_text(queryStmt, 8)];
+            trail.entryScreenName = [self convertFrom:sqlite3_column_text(queryStmt, 9)];
+            trail.entryParentTrailId = [self convertFrom:sqlite3_column_text(queryStmt, 10)];
+            trail.exitBy = [self convertFrom:sqlite3_column_text(queryStmt, 11)];
+            trail.exitScreen = [self convertFrom:sqlite3_column_text(queryStmt, 12)];
+            [listTrails addObject:trail];
+        }
+        result = [[SqliteTrailQuerySuccess alloc] initWithData:listTrails];
+    } else {
+        result = [[SqliteExecutionFailure alloc] initWithException:[self createSqliteExceptionWithReason:[NSString stringWithFormat:@"[TrailEvent] Wrong insert statement: %@", querySQLString]]];
+    }
+    sqlite3_finalize(queryStmt);
+    return result;
+}
+
+- (id<SqliteExecutionResult>)deleteByStatement:(NSString *)statement {
     const char* clearSQL = [statement UTF8String];
     sqlite3_stmt *clearStmt = nil;
     id<SqliteExecutionResult> result;

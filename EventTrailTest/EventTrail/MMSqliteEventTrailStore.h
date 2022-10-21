@@ -23,14 +23,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id<SqliteExecutionResult>)queryEventsBySessionIds:(NSArray<NSString *> *)sessionIds;
 - (id<SqliteExecutionResult>)queryEventsNotInSessionIds:(NSArray<NSString *> *)sessionIds;
+- (id<SqliteExecutionResult>)queryAllEvents;
+- (id<SqliteExecutionResult>)queryAllTrails;
 
  
 - (id<SqliteExecutionResult>)deleteEventsByEventIds:(NSArray<NSString *> *)eventIds;
 - (id<SqliteExecutionResult>)deleteEventsByTrailIds:(NSArray<NSString *> *)trailIds;
 - (id<SqliteExecutionResult>)deleteTrailsByTrailIds:(NSArray<NSString *> *)trailIds;
 
-- (id<SqliteExecutionResult>)clearAllEvents;
-- (id<SqliteExecutionResult>)clearAllTrails;
+- (id<SqliteExecutionResult>)deleteAllEvents;
+- (id<SqliteExecutionResult>)deleteAllTrails;
 
 @end
 

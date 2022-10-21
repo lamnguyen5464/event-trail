@@ -47,6 +47,19 @@ static SqliteExecutionSuccess *sharedObject = nil;
     
     return self;
 }
+@end
+
+#pragma mark - SqliteTrailQuerySuccess
+@implementation SqliteTrailQuerySuccess
+
+- (instancetype)initWithData:(NSArray<MMTrail *> *)data {
+    self = [super init];
+    if (self) {
+        self->_data = data;
+    }
+    
+    return self;
+}
 
 @end
 

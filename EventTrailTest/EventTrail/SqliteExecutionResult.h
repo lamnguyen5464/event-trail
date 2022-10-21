@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MMTrailEvent.h"
+#import "MMTrail.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,6 +30,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithData:(NSArray<MMTrailEvent *> *)data;
 @property (nonatomic, readonly) NSArray<MMTrailEvent *> * data;
 @end
+
+#pragma mark - SqliteTrailQuerySuccess
+@interface SqliteTrailQuerySuccess: NSObject<SqliteExecutionResult>
+- (instancetype)initWithData:(NSArray<MMTrail *> *)data;
+@property (nonatomic, readonly) NSArray<MMTrail *> * data;
+@end
+
 
 
 
