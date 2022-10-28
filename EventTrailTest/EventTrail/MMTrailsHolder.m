@@ -1,10 +1,10 @@
 //
-//  MMTrailManager.m
+//  MMTrailsHolder.m
 //
 //  Created by lam.nguyen5 on 10/20/22.
 //
 
-#import "MMTrailManager.h"
+#import "MMTrailsHolder.h"
 
 #pragma mark - MMTrailItem
 @interface MMTrailItem: NSObject
@@ -18,15 +18,13 @@
 
 
 #pragma mark - MMTrailManager implementation
-@implementation MMTrailManager {
+@implementation MMTrailsHolder {
     MMTrailItem *currentTrailItem;
-    id<MMEventTrailStore> store;
 }
 
-- (instancetype)initWithEventTrailStore:(id<MMEventTrailStore>)store {
+- (instancetype)init {
     self = [super init];
     if (self) {
-        self->store = store;
         self->currentTrailItem = nil;
     }
     
@@ -39,23 +37,13 @@
     return self->currentTrailItem ? self->currentTrailItem.value : nil;
 }
 
-- (MMTrail *)createNewTrail {
-    MMTrailItem *item = [MMTrailItem new];
 
-    MMTrail *newTrail = [MMTrail new];
-    BOOL isRootTrail = self->currentTrailItem == nil || self->currentTrailItem.value == nil;
-    newTrail.level = isRootTrail ? 0 : (self->currentTrailItem.value.level + 1);
-    newTrail.trailId = [[NSUUID UUID] UUIDString];
-    
-    item.value = newTrail;
+- (void)addTrail:(MMTrail *)trail {
+    MMTrailItem *item = [MMTrailItem new];
+    item.value = trail;
     item.parentTrail = self->currentTrailItem;
     self->currentTrailItem = item;
-    
-    
-//    NSLog(@"[trail] created trail: %@ level: %ld", newTrail.trailId, (long)newTrail.level);
-    
-    return self->currentTrailItem.value;
-    
+
 }
 
 - (MMTrail *)removeCurrentTrail {
@@ -68,7 +56,5 @@
     
     return self->currentTrailItem ? self->currentTrailItem.value : nil;
 }
-
-
 
 @end

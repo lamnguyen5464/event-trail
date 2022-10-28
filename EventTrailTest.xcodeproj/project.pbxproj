@@ -21,9 +21,25 @@
 		60C05B8E2900F539001276D8 /* MMTrailEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05B8D2900F539001276D8 /* MMTrailEvent.m */; };
 		60C05B9329010046001276D8 /* MMTrail.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05B9229010046001276D8 /* MMTrail.m */; };
 		60C05B96290100A1001276D8 /* MMAppSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05B95290100A1001276D8 /* MMAppSession.m */; };
-		60C05B9C29012A73001276D8 /* MMTrailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05B9B29012A73001276D8 /* MMTrailManager.m */; };
+		60C05B9C29012A73001276D8 /* MMTrailCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05B9B29012A73001276D8 /* MMTrailCreator.m */; };
 		60C05BA4290154F2001276D8 /* MMEventTrailProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BA3290154F2001276D8 /* MMEventTrailProvider.m */; };
 		60C05BA8290256CB001276D8 /* SqliteExecutionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BA7290256CB001276D8 /* SqliteExecutionResult.m */; };
+		60C05BAC29063C77001276D8 /* MMTrailEventCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BAB29063C77001276D8 /* MMTrailEventCreator.m */; };
+		60C05BAD29063C77001276D8 /* MMTrailEventCreator.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BAB29063C77001276D8 /* MMTrailEventCreator.m */; };
+		60C05BB0290644EE001276D8 /* MMTrailEventPersister.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BAF290644EE001276D8 /* MMTrailEventPersister.m */; };
+		60C05BB1290644EE001276D8 /* MMTrailEventPersister.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BAF290644EE001276D8 /* MMTrailEventPersister.m */; };
+		60C05BB429066A44001276D8 /* MMEventPushingScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BB329066A44001276D8 /* MMEventPushingScheduler.m */; };
+		60C05BB529066A44001276D8 /* MMEventPushingScheduler.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BB329066A44001276D8 /* MMEventPushingScheduler.m */; };
+		60C05BB829066CF3001276D8 /* MMFireAndForgetOldEventPusher.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BB729066CF3001276D8 /* MMFireAndForgetOldEventPusher.m */; };
+		60C05BB929066CF3001276D8 /* MMFireAndForgetOldEventPusher.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BB729066CF3001276D8 /* MMFireAndForgetOldEventPusher.m */; };
+		60C05BBC2906728D001276D8 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BBB2906728D001276D8 /* MMUtils.m */; };
+		60C05BBD2906728D001276D8 /* MMUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BBB2906728D001276D8 /* MMUtils.m */; };
+		60C05BC0290BBB71001276D8 /* MMTrailsHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BBF290BBB70001276D8 /* MMTrailsHolder.m */; };
+		60C05BC1290BBB71001276D8 /* MMTrailsHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BBF290BBB70001276D8 /* MMTrailsHolder.m */; };
+		60C05BC8290BE10D001276D8 /* MMStartTrailPersister.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BC7290BE10D001276D8 /* MMStartTrailPersister.m */; };
+		60C05BC9290BE10D001276D8 /* MMStartTrailPersister.m in Sources */ = {isa = PBXBuildFile; fileRef = 60C05BC7290BE10D001276D8 /* MMStartTrailPersister.m */; };
+		60C05BCB290BE7AC001276D8 /* event_trails.plantuml in Resources */ = {isa = PBXBuildFile; fileRef = 60C05BCA290BE7AC001276D8 /* event_trails.plantuml */; };
+		60C05BCC290BE7AC001276D8 /* event_trails.plantuml in Resources */ = {isa = PBXBuildFile; fileRef = 60C05BCA290BE7AC001276D8 /* event_trails.plantuml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,12 +87,28 @@
 		60C05B9229010046001276D8 /* MMTrail.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrail.m; sourceTree = "<group>"; };
 		60C05B94290100A1001276D8 /* MMAppSession.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMAppSession.h; sourceTree = "<group>"; };
 		60C05B95290100A1001276D8 /* MMAppSession.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMAppSession.m; sourceTree = "<group>"; };
-		60C05B9A29012A73001276D8 /* MMTrailManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTrailManager.h; sourceTree = "<group>"; };
-		60C05B9B29012A73001276D8 /* MMTrailManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrailManager.m; sourceTree = "<group>"; };
+		60C05B9A29012A73001276D8 /* MMTrailCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTrailCreator.h; sourceTree = "<group>"; };
+		60C05B9B29012A73001276D8 /* MMTrailCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrailCreator.m; sourceTree = "<group>"; };
 		60C05BA2290154F2001276D8 /* MMEventTrailProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMEventTrailProvider.h; sourceTree = "<group>"; };
 		60C05BA3290154F2001276D8 /* MMEventTrailProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMEventTrailProvider.m; sourceTree = "<group>"; };
 		60C05BA6290256CB001276D8 /* SqliteExecutionResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SqliteExecutionResult.h; sourceTree = "<group>"; };
 		60C05BA7290256CB001276D8 /* SqliteExecutionResult.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SqliteExecutionResult.m; sourceTree = "<group>"; };
+		60C05BAA29063C77001276D8 /* MMTrailEventCreator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTrailEventCreator.h; sourceTree = "<group>"; };
+		60C05BAB29063C77001276D8 /* MMTrailEventCreator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrailEventCreator.m; sourceTree = "<group>"; };
+		60C05BAE290644EE001276D8 /* MMTrailEventPersister.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTrailEventPersister.h; sourceTree = "<group>"; };
+		60C05BAF290644EE001276D8 /* MMTrailEventPersister.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrailEventPersister.m; sourceTree = "<group>"; };
+		60C05BB229066A44001276D8 /* MMEventPushingScheduler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMEventPushingScheduler.h; sourceTree = "<group>"; };
+		60C05BB329066A44001276D8 /* MMEventPushingScheduler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMEventPushingScheduler.m; sourceTree = "<group>"; };
+		60C05BB629066CF3001276D8 /* MMFireAndForgetOldEventPusher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMFireAndForgetOldEventPusher.h; sourceTree = "<group>"; };
+		60C05BB729066CF3001276D8 /* MMFireAndForgetOldEventPusher.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMFireAndForgetOldEventPusher.m; sourceTree = "<group>"; };
+		60C05BBA2906728D001276D8 /* MMUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUtils.h; sourceTree = "<group>"; };
+		60C05BBB2906728D001276D8 /* MMUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMUtils.m; sourceTree = "<group>"; };
+		60C05BBE290BBB70001276D8 /* MMTrailsHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMTrailsHolder.h; sourceTree = "<group>"; };
+		60C05BBF290BBB70001276D8 /* MMTrailsHolder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMTrailsHolder.m; sourceTree = "<group>"; };
+		60C05BC2290BC4EC001276D8 /* MMPersister.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMPersister.h; sourceTree = "<group>"; };
+		60C05BC6290BE10D001276D8 /* MMStartTrailPersister.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MMStartTrailPersister.h; sourceTree = "<group>"; };
+		60C05BC7290BE10D001276D8 /* MMStartTrailPersister.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MMStartTrailPersister.m; sourceTree = "<group>"; };
+		60C05BCA290BE7AC001276D8 /* event_trails.plantuml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = event_trails.plantuml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +159,10 @@
 		60C05B502900F1C7001276D8 /* EventTrailTest */ = {
 			isa = PBXGroup;
 			children = (
+				60C05BCA290BE7AC001276D8 /* event_trails.plantuml */,
 				60C05B862900F1E1001276D8 /* EventTrail */,
+				60C05BBA2906728D001276D8 /* MMUtils.h */,
+				60C05BBB2906728D001276D8 /* MMUtils.m */,
 				60C05B512900F1C7001276D8 /* AppDelegate.h */,
 				60C05B522900F1C7001276D8 /* AppDelegate.m */,
 				60C05B542900F1C7001276D8 /* SceneDelegate.h */,
@@ -163,22 +198,35 @@
 		60C05B862900F1E1001276D8 /* EventTrail */ = {
 			isa = PBXGroup;
 			children = (
+				60C05B94290100A1001276D8 /* MMAppSession.h */,
+				60C05B95290100A1001276D8 /* MMAppSession.m */,
 				60C05B892900F2B7001276D8 /* MMEventTrailIntegration.h */,
 				60C05B882900F2B6001276D8 /* MMEventTrailStore.h */,
 				60C05B8A2900F2B7001276D8 /* MMSqliteEventTrailStore.h */,
 				60C05B872900F2B6001276D8 /* MMSqliteEventTrailStore.m */,
+				60C05BA6290256CB001276D8 /* SqliteExecutionResult.h */,
+				60C05BA7290256CB001276D8 /* SqliteExecutionResult.m */,
 				60C05B8C2900F539001276D8 /* MMTrailEvent.h */,
 				60C05B8D2900F539001276D8 /* MMTrailEvent.m */,
 				60C05B8F2900FC22001276D8 /* MMTrail.h */,
 				60C05B9229010046001276D8 /* MMTrail.m */,
-				60C05B94290100A1001276D8 /* MMAppSession.h */,
-				60C05B95290100A1001276D8 /* MMAppSession.m */,
-				60C05B9A29012A73001276D8 /* MMTrailManager.h */,
-				60C05B9B29012A73001276D8 /* MMTrailManager.m */,
+				60C05BAA29063C77001276D8 /* MMTrailEventCreator.h */,
+				60C05BAB29063C77001276D8 /* MMTrailEventCreator.m */,
+				60C05B9A29012A73001276D8 /* MMTrailCreator.h */,
+				60C05B9B29012A73001276D8 /* MMTrailCreator.m */,
+				60C05BBE290BBB70001276D8 /* MMTrailsHolder.h */,
+				60C05BBF290BBB70001276D8 /* MMTrailsHolder.m */,
 				60C05BA2290154F2001276D8 /* MMEventTrailProvider.h */,
 				60C05BA3290154F2001276D8 /* MMEventTrailProvider.m */,
-				60C05BA6290256CB001276D8 /* SqliteExecutionResult.h */,
-				60C05BA7290256CB001276D8 /* SqliteExecutionResult.m */,
+				60C05BB229066A44001276D8 /* MMEventPushingScheduler.h */,
+				60C05BB329066A44001276D8 /* MMEventPushingScheduler.m */,
+				60C05BB629066CF3001276D8 /* MMFireAndForgetOldEventPusher.h */,
+				60C05BB729066CF3001276D8 /* MMFireAndForgetOldEventPusher.m */,
+				60C05BC2290BC4EC001276D8 /* MMPersister.h */,
+				60C05BAE290644EE001276D8 /* MMTrailEventPersister.h */,
+				60C05BAF290644EE001276D8 /* MMTrailEventPersister.m */,
+				60C05BC6290BE10D001276D8 /* MMStartTrailPersister.h */,
+				60C05BC7290BE10D001276D8 /* MMStartTrailPersister.m */,
 			);
 			path = EventTrail;
 			sourceTree = "<group>";
@@ -286,6 +334,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C05BCB290BE7AC001276D8 /* event_trails.plantuml in Resources */,
 				60C05B612900F1CB001276D8 /* LaunchScreen.storyboard in Resources */,
 				60C05B5E2900F1CB001276D8 /* Assets.xcassets in Resources */,
 				60C05B5C2900F1C7001276D8 /* Main.storyboard in Resources */,
@@ -296,6 +345,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C05BCC290BE7AC001276D8 /* event_trails.plantuml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,17 +363,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C05BB429066A44001276D8 /* MMEventPushingScheduler.m in Sources */,
 				60C05B592900F1C7001276D8 /* ViewController.m in Sources */,
 				60C05BA8290256CB001276D8 /* SqliteExecutionResult.m in Sources */,
 				60C05B8E2900F539001276D8 /* MMTrailEvent.m in Sources */,
 				60C05BA4290154F2001276D8 /* MMEventTrailProvider.m in Sources */,
+				60C05BB829066CF3001276D8 /* MMFireAndForgetOldEventPusher.m in Sources */,
+				60C05BAC29063C77001276D8 /* MMTrailEventCreator.m in Sources */,
+				60C05BB0290644EE001276D8 /* MMTrailEventPersister.m in Sources */,
 				60C05B9329010046001276D8 /* MMTrail.m in Sources */,
-				60C05B9C29012A73001276D8 /* MMTrailManager.m in Sources */,
+				60C05BC8290BE10D001276D8 /* MMStartTrailPersister.m in Sources */,
+				60C05B9C29012A73001276D8 /* MMTrailCreator.m in Sources */,
 				60C05B532900F1C7001276D8 /* AppDelegate.m in Sources */,
 				60C05B96290100A1001276D8 /* MMAppSession.m in Sources */,
 				60C05B642900F1CB001276D8 /* main.m in Sources */,
 				60C05B8B2900F2B7001276D8 /* MMSqliteEventTrailStore.m in Sources */,
 				60C05B562900F1C7001276D8 /* SceneDelegate.m in Sources */,
+				60C05BBC2906728D001276D8 /* MMUtils.m in Sources */,
+				60C05BC0290BBB71001276D8 /* MMTrailsHolder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +388,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C05BB929066CF3001276D8 /* MMFireAndForgetOldEventPusher.m in Sources */,
+				60C05BBD2906728D001276D8 /* MMUtils.m in Sources */,
+				60C05BB529066A44001276D8 /* MMEventPushingScheduler.m in Sources */,
+				60C05BAD29063C77001276D8 /* MMTrailEventCreator.m in Sources */,
+				60C05BC1290BBB71001276D8 /* MMTrailsHolder.m in Sources */,
 				60C05B6E2900F1CC001276D8 /* EventTrailTestTests.m in Sources */,
+				60C05BB1290644EE001276D8 /* MMTrailEventPersister.m in Sources */,
+				60C05BC9290BE10D001276D8 /* MMStartTrailPersister.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

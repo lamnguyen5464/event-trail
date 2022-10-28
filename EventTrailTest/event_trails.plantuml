@@ -1,0 +1,182 @@
+@startuml
+
+
+class EventTrailEngine {
+    tracker: TrailEventPersister
+    integrations: List<EventTrailIntegration>
+
+    + start();
+    + stop();
+
+    + track(TrailEvent));
+    
+    + startTrail(Trail);
+    + endTrail(Trail);
+
+}
+EventTrailEngine o-- EventTrailIntegration
+EventTrailEngine o-- Persister
+
+interface Persister<Item> {
+    + persist(Item)
+}
+Persister <-- TrailPersister
+Persister <-- TrailEventPersister
+
+abstract class TrailPersister<Trail> {
+    store: EventTrailStore;
+    eventCreator: TrailEventCreator;
+    eventPersister: TrailEventPersister;
+
+    + persist(Trail)
+}
+TrailPersister <-- StartTrailPersister
+TrailPersister <-- EndTrailPersister
+TrailPersister o-- EventTrailStore
+TrailPersister o-- Persister
+
+
+class TrailEventPersister {
+    store: EventTrailStore;
+
+    + persist(TrailEvent)
+}
+TrailEventPersister o-- EventTrailStore
+
+class StartTrailPersister { 
+    + persist(Trail)
+}
+
+class EndTrailPersister { 
+    + persist(Trail)
+}
+
+
+' TrailEventPersister o-- UpcomingTrailEventsSubject
+
+' class UpcomingTrailEventsSubject {
+'     + emit()
+'     + onUpComingEvent(callback)
+' }
+
+interface EventTrailIntegration {
+    + start();
+    + stop();
+}
+EventTrailIntegration <-- MMEventPushingScheduler
+EventTrailIntegration <--  MMFireAndForgetOldEventPusher
+' EventTrailIntegration <-- ThresholdPusherIntegration
+
+
+class MMEventPushingScheduler {
+    store: EventTrailStore;
+    + start();
+    + stop();
+}
+MMEventPushingScheduler o-- EventTrailStore
+
+' class ThresholdPusherIntegration {
+'     subject: UpcomingTrailEventsSubject;
+'     store: EventTrailStore;
+'     thresholdNumberOfEvents: Int;
+'     - checkIfReachingThreshold();
+'     + start();
+'     + stop();
+' }
+' ThresholdPusherIntegration o-- UpcomingTrailEventsSubject
+' ThresholdPusherIntegration o-- EventTrailStore
+
+class  MMFireAndForgetOldEventPusher {
+    store: EventTrailStore;
+    trailEventCreator: TrailEventCreator;
+
+    + start();
+    + stop();
+}
+ MMFireAndForgetOldEventPusher o-- EventTrailStore
+
+interface EventTrailStore {
+    + saveEvent(MMTrailEvent);
+    + saveTrail(MMTrail);
+
+    + queryEventsBySessionIds(Array<String>);
+    + queryEventsNotInSessionIds(Array<String>);
+    + queryAllEvents();
+    + queryAllTrails();
+ 
+    + deleteEventsByEventIds(Array<String>);
+    + deleteEventsByTrailIds(Array<String>);
+    + deleteTrailsByTrailIds(Array<String>);
+    + deleteAllEvents()
+    + deleteAllTrails()
+}
+
+EventTrailStore <-- SqliteEventTrailStore
+
+class SqliteEventTrailStore {
+    database: Sqlite;
+}
+ 
+class Trail {
+	trail_id: string,
+    trail_session: string,
+	tracking_session_id: string,
+	app_id: string,
+	level: int,
+	entry_scope: string,
+	entry_type: string,
+	entry_app_id_trigger: string,
+	entry_screen_name: string,
+	entry_parent_trail_id: string,
+	exit_by: string,
+	exit_screen: string,
+}
+
+class TrailEvent {
+  event_id: string,
+  trail_id: string,
+  prev_event_id: string,
+  event_name: string,
+  event_params: string,
+}
+
+class TrailsHolder {
+    appSession: AppSession;
+    - currentTrail: Trail;
+
+    + addTrail(Trail): Trail;
+    + removeTrail(): Trail;
+    + getCurrentTrailId(): string;
+}
+TrailsHolder o-- AppSession
+
+class TrailEventHolder {
+    - currentEventId: TrailEvent;
+
+    + addEvent(TrailEvent);
+    + getCurrentEventId():string;
+}
+
+class TrailEventCreator {
+    trailsHolder: TrailsHolder;
+    trailEventHolder: TrailEventHolder;
+
+    + create(): TrailEvent;
+}
+TrailEventCreator o-- TrailsHolder
+TrailEventCreator o-- TrailEventHolder
+
+class TrailCreator {
+    trailsHolder: TrailsHolder;
+
+    + create(): Trail;
+}
+TrailCreator o--TrailsHolder
+
+class AppSession {
+    - currentAppSession: string;
+    + getCurrentSession(): string;
+}
+
+@enduml
+

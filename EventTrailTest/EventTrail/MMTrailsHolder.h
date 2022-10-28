@@ -1,5 +1,5 @@
 //
-//  MMTrailManager.h
+//  MMTrailsHolder.h
 //
 //  Created by lam.nguyen5 on 10/20/22.
 //
@@ -7,13 +7,14 @@
 #import <Foundation/Foundation.h>
 #import "MMTrail.h"
 #import "MMEventTrailStore.h"
+#import "MMAppSession.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MMTrailManager: NSObject
+@interface MMTrailsHolder: NSObject
 
 - (MMTrail *)getCurrentTrail;
-- (MMTrail *)createNewTrail;
+- (void)addTrail:(MMTrail *)trail;
 - (MMTrail *)removeCurrentTrail;
 
 @end

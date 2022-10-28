@@ -114,10 +114,35 @@
     }
 }
 
+- (void)testDeleteEventsByTrailIds {
+    [self testSaveTrail];
+    [self testSaveEvent];
+    
+    [self->store deleteEventsByTrailIds:@[@"trail-id-0", @"trail-id-1", @"trail-id-10"]];
+    
+    id<SqliteExecutionResult> result = [self->store queryEventsBySessionIds:@[@"trail-session-id-1", @"trail-session-id-0"]];
+    if ([result isMemberOfClass:[SqliteExecutionFailure class]]) {
+        SqliteExecutionFailure *resultFailure = (SqliteExecutionFailure *) result;
+        NSString *errorString = [NSString stringWithFormat:@"Error: %@",resultFailure.exception.reason];
+        NSLog(@"%@", errorString);
+        XCTFail();
+    }
+    
+    if ([result isMemberOfClass:[SqliteTrailEventQuerySuccess class]]) {
+        SqliteTrailEventQuerySuccess *resultSuccess = (SqliteTrailEventQuerySuccess *)result;
+        for (MMTrailEvent *event in resultSuccess.data) {
+            if ([event.trailId  isEqual: @"trail-id-0"] || [event.trailId  isEqual: @"trail-id-1"]) {
+                XCTFail();
+            }
+            NSLog(@"[TrailEvent] queried event: %@ - %@ - %@", event.eventId, event.trailId, event.eventName);
+        }
+    }
+}
+
 - (void)testLevelWhenCreateAndRemoveTrail {
     NSInteger oldLevel = -1;
     for(int i = 0; i < 10; i++) {
-        MMTrail *trail = [trailManager createNewTrail];
+        MMTrail *trail = [trailManager createWithAppId:@"" entryScope:@"" entryType:@"" entryAppIdTrigger:@"" entryScreenName:@"" exitBy:@"" exitScreen:@""];
         if (trail.level <= oldLevel) {
             XCTFail("invalid level");
         }

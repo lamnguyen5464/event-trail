@@ -9,7 +9,7 @@
 #import "MMSqliteEventTrailStore.h"
 #import "MMEventTrailStore.h"
 #import "MMEventTrailStore.h"
-#import "MMTrailManager.h"
+#import "MMTrailCreator.h"
 #import "MMTrailEvent.h"
 #import "MMTrail.h"
 #import "SqliteExecutionResult.h"
