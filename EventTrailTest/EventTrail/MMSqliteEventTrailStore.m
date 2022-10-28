@@ -69,7 +69,7 @@
         [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
     }
     
-    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session IN (%@)", [parsedSessionIds componentsJoinedByString:@", "]];
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session IN (%@) ORDER BY create_at", [parsedSessionIds componentsJoinedByString:@", "]];
     
     return [self queryEventsByStatement:querySQLString];
 }
@@ -81,14 +81,14 @@
         [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
     }
     
-    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session NOT IN (%@)", [parsedSessionIds componentsJoinedByString:@", "]];
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session NOT IN (%@) ORDER BY create_at", [parsedSessionIds componentsJoinedByString:@", "]];
     
     return [self queryEventsByStatement:querySQLString];
 }
 
 
 - (id<SqliteExecutionResult>)queryAllEvents {
-    return [self queryEventsByStatement:@"SELECT * FROM TRAIL_EVENTS"];
+    return [self queryEventsByStatement:@"SELECT * FROM TRAIL_EVENTS ORDER BY create_at"];
     
 }
 - (id<SqliteExecutionResult>)queryAllTrails {
