@@ -42,12 +42,13 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
 
 - (void)flushEvents:(MMEventPushingScheduler *)_self {
     
-    NSArray<MMTrailEvent *> *events = [_self queryEvents:_self];
+    NSArray<MMStorePersistedTrailEvent *> *events = [_self queryEvents:_self];
     if (!events) {
         return;
     }
     
-    // TODO: send events to server;
+    [_self->pusher pushEvents:events];
+    // TODO: handle pushing status
     
     NSMutableArray<NSString *> *eventIds = [NSMutableArray new];
     for (MMTrailEvent *event in events) {
@@ -58,7 +59,7 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
    
 }
 
-- (NSArray<MMTrailEvent *> *)queryEvents:(MMEventPushingScheduler *)_self {
+- (NSArray<MMStorePersistedTrailEvent *> *)queryEvents:(MMEventPushingScheduler *)_self {
     NSArray<NSString *> *sessionIds = [NSArray arrayWithObject:[MMAppSession getCurrentAppSession]];
     id<SqliteExecutionResult> result = [_self->store queryEventsBySessionIds:sessionIds];
     if ([result isMemberOfClass:[SqliteTrailEventQuerySuccess class]]) {

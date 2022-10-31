@@ -22,12 +22,16 @@ typedef enum {
 }
 
 
-- (BOOL)pushEvents:(NSArray<MMTrailEvent *> *)events {
-    NSMutableArray *parsedEvents = [NSMutableArray new];
-    for (MMTrailEvent *event in events) {
-        [parsedEvents addObject:[event toDictionary]];
+- (BOOL)pushEvents:(NSArray<MMStorePersistedTrailEvent *> *)events {
+    NSMutableArray<NSString *> *parsedEvents = [NSMutableArray new];
+    for (MMStorePersistedTrailEvent *event in events) {
+        [parsedEvents addObject:event.eventBundle];
     }
-    NSString *payload = [MMUtils convertToJsonStringFromArray:parsedEvents];
+    
+    NSString *payload = [NSString stringWithFormat:@"[%@]", [parsedEvents componentsJoinedByString:@","]];
+    
+    NSLog(@"[TrailEvent] push events: %@", payload);
+    
     [self __sendsEventsToServerInternal:payload];
     
     return YES;
@@ -74,11 +78,10 @@ typedef enum {
       NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
     
       NSLog(@"statusCode %ld", (long)httpResponse.statusCode);
-    
       if (200 == httpResponse.statusCode) {
           respStatus = NETWORK_SUCCESS;
       } else {
-        NSString *errorResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//        NSString *errorResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         respStatus = NETWORK_ERROR;
 //        [MMLogger logError:[[NSString alloc] initWithFormat:@"ServerError: %@", errorResponse]];
       }

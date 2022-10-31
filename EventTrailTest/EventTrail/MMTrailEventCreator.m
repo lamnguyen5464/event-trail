@@ -18,16 +18,27 @@
 }
 
 - (MMTrailEvent *)createWithName:(NSString *)eventName
-                     eventParams:(NSString *)eventParams {
-    MMTrailEvent *event = [MMTrailEvent new];
+                     eventParams:(NSDictionary *)eventParams {
+
     MMTrail *currentTrail = [self->trailsHolder getCurrentTrail];
-    event.eventName = eventName;
-    event.eventParams = eventParams;
-    event.trailId = currentTrail == nil ? nil : [currentTrail trailId];
-    event.eventId = [self createNewId];
-    event.previousEventId = self->previousEventId;
+
     
-    self->previousEventId = event.eventId;
+    NSString *trailId = currentTrail == nil ? nil : [currentTrail trailId];
+    NSString *eventId = [self createNewId];
+    
+    NSMutableDictionary *handledEventParams = [NSMutableDictionary dictionaryWithDictionary:eventParams];
+    [handledEventParams setValue:trailId forKey:@"trail_id"];
+    [handledEventParams setValue:eventId forKey:@"event_id"];
+    [handledEventParams setValue:self->previousEventId forKey:@"prev_event_id"];
+    
+    
+    self->previousEventId = eventId;
+    
+    MMTrailEvent *event = [MMTrailEvent new];
+    event.eventName = eventName;
+    event.eventParams = handledEventParams;
+    event.trailId = trailId;
+    
     return event;
 }
 

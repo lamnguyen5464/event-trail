@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithTrailsHolder:(MMTrailsHolder *)trailsHolder;
 
 - (MMTrailEvent *)createWithName:(NSString *)eventName
-                     eventParams:(NSString *)eventParams;
+                     eventParams:(NSDictionary *)eventParams;
 @end
 
 NS_ASSUME_NONNULL_END

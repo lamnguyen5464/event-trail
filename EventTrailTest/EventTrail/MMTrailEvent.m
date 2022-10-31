@@ -13,22 +13,27 @@
     self = [super init];
     if (self) {
         self->_eventId = @"";
-        self->_trailId = @"";
-        self->_previousEventId = @"";
         self->_eventName = @"";
-        self->_eventParams = @"";
+        self->_trailId = @"";
+        self->_eventParams = [NSDictionary dictionary];
     }
     return self;
 }
 
-- (NSDictionary *)toDictionary {
+- (MMStorePersistedTrailEvent *)toPersistModel {
+    MMStorePersistedTrailEvent *persistedData = [MMStorePersistedTrailEvent new];
+    persistedData.eventId = self->_eventId;
+    persistedData.trailId = self->_trailId;
+    persistedData.eventName = self->_eventName;
+    
     NSMutableDictionary *dict = [NSMutableDictionary new];
-    [dict setValue:self->_eventId forKey:@"event_id"];
-    [dict setValue:self->_trailId forKey:@"trail_id"];
-    [dict setValue:self->_previousEventId forKey:@"prev_event_id"];
     [dict setValue:self->_eventName forKey:@"event_name"];
     [dict setValue:self->_eventParams forKey:@"event_params"];
-    return dict;
+    
+    
+    persistedData.eventBundle = [MMUtils convertToJsonString:dict];
+    
+    return persistedData;
 }
 
 

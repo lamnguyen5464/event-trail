@@ -10,6 +10,7 @@
 #import "MMEventTrailPusher.h"
 #import "MMEventTrailStore.h"
 #import "MMAppSession.h"
+#import "MMStorePersistedTrailEvent.h"
 
 
 NS_ASSUME_NONNULL_BEGIN

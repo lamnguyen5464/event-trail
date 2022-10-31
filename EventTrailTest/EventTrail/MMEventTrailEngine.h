@@ -5,6 +5,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMStorePersistedTrailEvent.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

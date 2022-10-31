@@ -134,11 +134,19 @@ class Trail {
 }
 
 class TrailEvent {
-  event_id: string,
-  trail_id: string,
-  prev_event_id: string,
   event_name: string,
-  event_params: string,
+  event_params: Dictionary,
+
+  trail_id: string, // in event_params also
+  event_id: string, // in event_params also
+}
+
+class StorePersistedTrailEvent {
+  event_name: string,
+  event_bundle: string,
+
+  trail_id: string, 
+  event_id: string,
 }
 
 class TrailsHolder {
@@ -162,7 +170,7 @@ class TrailEventCreator {
     trailsHolder: TrailsHolder;
     trailEventHolder: TrailEventHolder;
 
-    + create(): TrailEvent;
+    + create(event_name, event_params): TrailEvent;
 }
 TrailEventCreator o-- TrailsHolder
 TrailEventCreator o-- TrailEventHolder
@@ -170,7 +178,7 @@ TrailEventCreator o-- TrailEventHolder
 class TrailCreator {
     trailsHolder: TrailsHolder;
 
-    + create(): Trail;
+    + create(app_id, entry_point.scope, entry_point.type, entry_point.app_id_trigger, entry_point.screen_name, entry_point.parent_id): Trail;
 }
 TrailCreator o--TrailsHolder
 

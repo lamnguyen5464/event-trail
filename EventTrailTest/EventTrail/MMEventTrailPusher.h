@@ -7,12 +7,13 @@
 #import <Foundation/Foundation.h>
 #import "MMTrailEvent.h"
 #import "MMUtils.h"
+#import "MMStorePersistedTrailEvent.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MMEventTrailPusher: NSObject
 
-- (BOOL)pushEvents:(NSArray<MMTrailEvent *> *)events;
+- (BOOL)pushEvents:(NSArray<MMStorePersistedTrailEvent *> *)events;
 
 @end
 

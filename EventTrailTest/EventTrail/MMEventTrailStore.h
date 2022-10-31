@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol MMEventTrailStore <NSObject>
-- (id<SqliteExecutionResult>)saveEvent:(MMTrailEvent *)event;
+- (id<SqliteExecutionResult>)saveEvent:(MMStorePersistedTrailEvent *)event;
 - (id<SqliteExecutionResult>)saveTrail:(MMTrail *)trail;
 
 - (id<SqliteExecutionResult>)queryEventsBySessionIds:(NSArray<NSString *> *)sessionIds;

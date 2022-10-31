@@ -21,7 +21,7 @@
     __weak __typeof(self) weakSelf = self;
     dispatch_async(self->taskQueue, ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf->store saveEvent:data];
+        [strongSelf->store saveEvent:[data toPersistModel]];
     });
 }
 

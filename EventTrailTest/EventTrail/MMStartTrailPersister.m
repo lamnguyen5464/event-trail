@@ -26,7 +26,8 @@
     dispatch_async(self->taskQueue, ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         
-        MMTrailEvent *event = [strongSelf->eventCreator createWithName:@"trail_start" eventParams:@""];
+        // TODO: handle event_params
+        MMTrailEvent *event = [strongSelf->eventCreator createWithName:@"trail_start" eventParams:[NSDictionary dictionary]];
         [strongSelf->eventPersister persist:event];
         [strongSelf->store saveTrail:data];
     });

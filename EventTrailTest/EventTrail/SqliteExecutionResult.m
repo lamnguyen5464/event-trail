@@ -39,7 +39,7 @@ static SqliteExecutionSuccess *sharedObject = nil;
 #pragma mark - SqliteTrailEventQuerySuccess
 @implementation SqliteTrailEventQuerySuccess
 
-- (instancetype)initWithData:(NSArray<MMTrailEvent *> *)data {
+- (instancetype)initWithData:(NSArray<MMStorePersistedTrailEvent *> *)data {
     self = [super init];
     if (self) {
         self->_data = data;

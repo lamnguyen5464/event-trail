@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 #import "MMEventTrailStore.h"
+#import "MMUtils.h"
 //#import <shared/shared.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
     //  id<SharedLogger> logger;
     
 }
-- (id<SqliteExecutionResult>)saveEvent:(MMTrailEvent *)event;
+- (id<SqliteExecutionResult>)saveEvent:(MMStorePersistedTrailEvent *)event;
 - (id<SqliteExecutionResult>)saveTrail:(MMTrail *)trail;
 
 - (id<SqliteExecutionResult>)queryEventsBySessionIds:(NSArray<NSString *> *)sessionIds;

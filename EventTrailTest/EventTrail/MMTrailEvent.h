@@ -5,18 +5,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMUtils.h"
+#import "MMStorePersistedTrailEvent.h"
+#import "MMUtils.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MMTrailEvent: NSObject
 
-@property (nonatomic) NSString *eventId;
 @property (nonatomic) NSString *trailId;
-@property (nonatomic) NSString *previousEventId;
+@property (nonatomic) NSString *eventId;
 @property (nonatomic) NSString *eventName;
-@property (nonatomic) NSString *eventParams;
+@property (nonatomic) NSDictionary *eventParams;
 
-- (NSDictionary *)toDictionary;
+- (MMStorePersistedTrailEvent *)toPersistModel;
 
 @end
 
