@@ -14,14 +14,17 @@
 @end
 
 @implementation EventTrailTestTests {
-    MMTrailManager *trailManager;
     id<MMEventTrailStore> store;
 }
 
 - (void)setUp {
     NSLog(@">> SetUp");
-    self->trailManager = [MMTrailManager new];
-    self->store = [MMSqliteEventTrailStore new];
+    
+    self->store = [MMEventTrailProvider sharedEventTrailStore];
+    
+    [[MMEventTrailProvider sharedIntegrations] enumerateObjectsUsingBlock:^(id<MMEventTrailIntegration>  _Nonnull integration, NSUInteger idx, BOOL * _Nonnull stop) {
+        [integration start];
+    }];
     
     [self->store deleteAllTrails];
     [self->store deleteAllEvents];
@@ -139,28 +142,6 @@
     }
 }
 
-- (void)testLevelWhenCreateAndRemoveTrail {
-    NSInteger oldLevel = -1;
-    for(int i = 0; i < 10; i++) {
-        MMTrail *trail = [trailManager createWithAppId:@"" entryScope:@"" entryType:@"" entryAppIdTrigger:@"" entryScreenName:@"" exitBy:@"" exitScreen:@""];
-        if (trail.level <= oldLevel) {
-            XCTFail("invalid level");
-        }
-        oldLevel++;
-    }
-    
-    for(int i = 0; i < 10; i++) {
-        MMTrail *trail = [trailManager removeCurrentTrail];
-        if (trail.level > oldLevel) {
-            NSString* errorString = [NSString stringWithFormat:@"invalid level | oldLevel:%zd | currentLevel:%zd", oldLevel, trail.level];
-            NSLog(@"%@", errorString);
-            XCTFail();
-        }
-        oldLevel--;
-    }
-    XCTAssertNil([trailManager removeCurrentTrail]);
-   
-}
 
 - (void)testPerformanceExample {
     // This is an example of a performance test case.

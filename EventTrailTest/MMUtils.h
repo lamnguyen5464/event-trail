@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString*) encodeToBase64:(NSString*) stringToEncode;
 + (NSString*) decodeFromBase64:(NSString*) stringToDecode;
 + (NSString*) convertToJsonString:(NSDictionary<NSString*, NSObject*>*) dict;
++ (NSString*) convertToJsonStringFromArray:(NSArray<NSDictionary<NSString*, NSObject*>*>*) dictArray;
+
 
 + (dispatch_source_t)startTimer:(dispatch_queue_t)queue
                    withInterval:(double)interval /* in seconds */

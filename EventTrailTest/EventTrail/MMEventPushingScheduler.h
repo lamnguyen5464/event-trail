@@ -8,6 +8,9 @@
 #import "MMEventTrailIntegration.h"
 #import "MMUtils.h"
 #import "MMSqliteEventTrailStore.h"
+#import "MMAppSession.h"
+#import "SqliteExecutionResult.h"
+#import "MMEventTrailPusher.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,7 +19,12 @@ NS_ASSUME_NONNULL_BEGIN
     dispatch_source_t flushTimer;
     dispatch_queue_t taskQueue;
     id<MMEventTrailStore> store;
+    MMEventTrailPusher *pusher;
 }
+
+- (instancetype)initWithStore:(id<MMEventTrailStore>)store
+            eventTrailPusher:(MMEventTrailPusher *)pusher;
+
 
 @end
 

@@ -8,10 +8,14 @@
 
 @implementation MMFireAndForgetOldEventPusher 
 
-- (instancetype)initWithStore:(id<MMEventTrailStore>)store {
+- (instancetype)initWithStore:(id<MMEventTrailStore>)store
+            trailEventCreator:(MMTrailEventCreator *)trailEventCreator
+             eventTrailPusher:(MMEventTrailPusher *)pusher {
     self = [super init];
     if (self) {
         self->store = store;
+        self->trailEventCreator = trailEventCreator;
+        self->pusher = pusher;
         self->taskQueue = dispatch_queue_create("EventTrail.MMFireAndForgetOldEventPusher.taskQueue", NULL);
     }
     return self;
@@ -27,10 +31,13 @@
             SqliteTrailEventQuerySuccess *successfulResult = (SqliteTrailEventQuerySuccess *)result;
             NSArray<MMTrailEvent *> *oldEvents = successfulResult.data;
             
-            [strongSelf createExitEventsInternally:strongSelf events:oldEvents];
-            [strongSelf submitEventsInternally:strongSelf events:oldEvents];
-            [strongSelf clearEventsInternally:strongSelf events:oldEvents];
+            NSArray<MMTrailEvent *> *handledEvents = [strongSelf createExitEventsInternally:strongSelf events:oldEvents];
             
+            BOOL submitedSuccessfully = [strongSelf submitEventsInternally:strongSelf events:handledEvents];
+            
+            if (submitedSuccessfully) {
+                [strongSelf clearEventsInternally:strongSelf events:handledEvents];
+            }
         }
         
     });
@@ -43,14 +50,28 @@
 
 # pragma mark -
  
-- (void)submitEventsInternally:(MMFireAndForgetOldEventPusher *)_self
+- (BOOL)submitEventsInternally:(MMFireAndForgetOldEventPusher *)_self
                         events:(NSArray<MMTrailEvent *> *)events {
-    
+    return [_self->pusher pushEvents:events];
 }
 
-- (void)createExitEventsInternally:(MMFireAndForgetOldEventPusher *)_self
+- (NSArray<MMTrailEvent *> *)createExitEventsInternally:(MMFireAndForgetOldEventPusher *)_self
               events:(NSArray<MMTrailEvent *> *)events {
     
+    NSMutableSet *trailIds = [NSMutableSet new];
+    for (MMTrailEvent *event in events) {
+        if (!event) continue;
+        [trailIds addObject:event.trailId];
+    }
+    
+    NSMutableArray *listEvents = [NSMutableArray arrayWithArray:events];
+    
+    [trailIds enumerateObjectsUsingBlock:^(NSString * _Nonnull trailId, BOOL * _Nonnull stop) {
+        MMTrailEvent *event = [_self->trailEventCreator createWithName:@"trail_end" eventParams:@""];
+        [listEvents addObject:event];
+    }];
+    
+    return listEvents;
 }
 
 - (void)clearEventsInternally:(MMFireAndForgetOldEventPusher *)_self

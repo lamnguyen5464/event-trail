@@ -8,17 +8,29 @@
 
 #import "MMSqliteEventTrailStore.h"
 #import "MMEventTrailStore.h"
-#import "MMEventTrailStore.h"
 #import "MMTrailCreator.h"
+#import "MMTrailEventCreator.h"
 #import "MMTrailEvent.h"
 #import "MMTrail.h"
 #import "SqliteExecutionResult.h"
-
-
+#import "MMEventPushingScheduler.h"
+#import "MMEventTrailPusher.h"
+#import "MMTrailEventPersister.h"
+#import "MMStartTrailPersister.h"
+#import "MMEventTrailIntegration.h"
+#import "MMFireAndForgetOldEventPusher.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MMEventTrailProvider: NSObject
+
++ (MMEventTrailPusher *)sharedEventTrailPusher;
++ (id<MMEventTrailStore>)sharedEventTrailStore;
++ (MMTrailEventCreator *)sharedTrailEventCreator;
++ (MMTrailCreator *)sharedTrailCreator;
++ (MMTrailEventPersister *)sharedTrailEventPersister;
++ (MMStartTrailPersister *)sharedTrailPersister;
++ (NSArray<id<MMEventTrailIntegration>> *)sharedIntegrations;
 
 @end
 

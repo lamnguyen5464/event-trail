@@ -10,12 +10,13 @@ class EventTrailEngine {
 
     + track(TrailEvent));
     
-    + startTrail(Trail);
-    + endTrail(Trail);
+    + createTrail(Trail);
+    + closeTrail(Trail);
 
 }
 EventTrailEngine o-- EventTrailIntegration
-EventTrailEngine o-- Persister
+EventTrailEngine o-- TrailEventPersister
+EventTrailEngine o-- TrailPersister
 
 interface Persister<Item> {
     + persist(Item)
@@ -30,10 +31,10 @@ abstract class TrailPersister<Trail> {
 
     + persist(Trail)
 }
-TrailPersister <-- StartTrailPersister
-TrailPersister <-- EndTrailPersister
+' TrailPersister <-- StartTrailPersister
+' TrailPersister <-- EndTrailPersister
 TrailPersister o-- EventTrailStore
-TrailPersister o-- Persister
+TrailPersister o-- TrailEventPersister
 
 
 class TrailEventPersister {
@@ -43,13 +44,13 @@ class TrailEventPersister {
 }
 TrailEventPersister o-- EventTrailStore
 
-class StartTrailPersister { 
-    + persist(Trail)
-}
+' class StartTrailPersister { 
+'     + persist(Trail)
+' }
 
-class EndTrailPersister { 
-    + persist(Trail)
-}
+' class EndTrailPersister { 
+'     + persist(Trail)
+' }
 
 
 ' TrailEventPersister o-- UpcomingTrailEventsSubject
@@ -141,14 +142,14 @@ class TrailEvent {
 }
 
 class TrailsHolder {
-    appSession: AppSession;
+    trailSession: TrailSession;
     - currentTrail: Trail;
 
     + addTrail(Trail): Trail;
     + removeTrail(): Trail;
     + getCurrentTrailId(): string;
 }
-TrailsHolder o-- AppSession
+TrailsHolder o-- TrailSession
 
 class TrailEventHolder {
     - currentEventId: TrailEvent;
@@ -173,7 +174,7 @@ class TrailCreator {
 }
 TrailCreator o--TrailsHolder
 
-class AppSession {
+class TrailSession {
     - currentAppSession: string;
     + getCurrentSession(): string;
 }

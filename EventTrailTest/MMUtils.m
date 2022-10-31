@@ -152,6 +152,20 @@
   return @"{}";
 }
 
++ (NSString*) convertToJsonStringFromArray:(NSArray<NSDictionary<NSString*, NSObject*>*>*) dictArray
+{
+  if (dictArray) {
+    @try {
+      NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictArray options:0 error:nil];
+      NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+      return jsonString;
+    } @catch (NSException *exception) {
+      return @"{}";
+    }
+  }
+  return @"{}";
+}
+
 + (dispatch_source_t)startTimer:(dispatch_queue_t)queue
                    withInterval:(double)interval /* in seconds */
                           block:(dispatch_block_t)block

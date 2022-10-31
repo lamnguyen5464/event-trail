@@ -10,10 +10,12 @@
 
 int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
 
-- (instancetype)initWithStore:(id<MMEventTrailStore>)store {
+- (instancetype)initWithStore:(id<MMEventTrailStore>)store
+            eventTrailPusher:(MMEventTrailPusher *)pusher {
     self = [super init];
     if (self) {
         self->store = store;
+        self->pusher = pusher;
         self->taskQueue = dispatch_queue_create("EventTrail.MMEventPushingScheduler.taskQueue", NULL);
     }
     return self;
@@ -23,10 +25,10 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
     if (self->flushTimer) {
         return;
     }
-    double MMAnalyticsDefaultFlushIntervalInSeconds = MMAnalyticsDefaultFlushIntervalMillis / 1000;
+    double defaultFlushIntervalInSeconds = MMAnalyticsDefaultFlushIntervalMillis / 1000;
     
     __weak __typeof(self) weakSelf = self;
-    self->flushTimer = [MMUtils startTimer:self->taskQueue withInterval:MMAnalyticsDefaultFlushIntervalInSeconds block:^{
+    self->flushTimer = [MMUtils startTimer:self->taskQueue withInterval:defaultFlushIntervalInSeconds block:^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
         NSLog(@"[TrailEvent] start flush events");
         [strongSelf flushEvents:strongSelf];
@@ -40,10 +42,31 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
 
 - (void)flushEvents:(MMEventPushingScheduler *)_self {
     
+    NSArray<MMTrailEvent *> *events = [_self queryEvents:_self];
+    if (!events) {
+        return;
+    }
+    
+    // TODO: send events to server;
+    
+    NSMutableArray<NSString *> *eventIds = [NSMutableArray new];
+    for (MMTrailEvent *event in events) {
+        [eventIds addObject:event.eventId];
+    }
+    
+    [_self->store deleteEventsByEventIds:eventIds];
+   
 }
 
-- (void)queryEvents:(MMEventPushingScheduler *)_self {
-    
+- (NSArray<MMTrailEvent *> *)queryEvents:(MMEventPushingScheduler *)_self {
+    NSArray<NSString *> *sessionIds = [NSArray arrayWithObject:[MMAppSession getCurrentAppSession]];
+    id<SqliteExecutionResult> result = [_self->store queryEventsBySessionIds:sessionIds];
+    if ([result isMemberOfClass:[SqliteTrailEventQuerySuccess class]]) {
+        SqliteTrailEventQuerySuccess *resultSuccess = (SqliteTrailEventQuerySuccess *)result;
+        return resultSuccess.data;
+    } else {
+        return nil;
+    }
 }
 
 @end
