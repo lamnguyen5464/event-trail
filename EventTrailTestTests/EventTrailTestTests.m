@@ -63,7 +63,7 @@
         event.trailId = [NSString stringWithFormat:@"trail-id-%ld",i%5];
         event.eventName = [NSString stringWithFormat:@"event_name_%ld", (long)i];
         
-        id<SqliteExecutionResult> result = [self->store saveEvent:event];
+        id<SqliteExecutionResult> result = [self->store saveEvent:[event toPersistModel]];
         if ([result isMemberOfClass:[SqliteExecutionFailure class]]) {
             SqliteExecutionFailure *resultFailure = (SqliteExecutionFailure *) result;
             NSString *errorString = [NSString stringWithFormat:@"Error: %@",resultFailure.exception.reason];

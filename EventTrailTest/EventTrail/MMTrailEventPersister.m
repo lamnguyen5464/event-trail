@@ -18,6 +18,7 @@
 }
 
 - (void)persist:(MMTrailEvent *)data {
+    if (!data) return;
     __weak __typeof(self) weakSelf = self;
     dispatch_async(self->taskQueue, ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;

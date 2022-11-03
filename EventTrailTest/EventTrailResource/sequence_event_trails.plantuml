@@ -1,0 +1,17 @@
+@startuml
+
+EventTrailSDK -> TrailsManager: create(CreateTrailMeta)
+TrailsManager -> TrailsManager: cache latest Trail in ram
+TrailsManager --> EventTrailSDK: Trail
+EventTrailSDK -> EventTrailEngine: track(Trail)
+EventTrailEngine -> TrailPersister: persist(Trail)
+TrailPersister -> TrailEventCreator: create CreateTrailEvent
+TrailEventCreator -> TrailEventCreator: cache latest TrailEvent in ram
+TrailEventCreator --> TrailPersister: TrailEvent: event start_trail
+TrailPersister -> TrailEventPersister: persist(TrailEvent)
+TrailEventPersister -> Store: save(TrailEvent)
+TrailPersister -> Store: save(Trail)
+
+
+@enduml
+

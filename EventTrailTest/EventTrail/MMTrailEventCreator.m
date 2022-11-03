@@ -8,10 +8,10 @@
 
 @implementation MMTrailEventCreator
 
-- (instancetype)initWithTrailsHolder:(MMTrailsHolder *)trailsHolder {
+- (instancetype)initWithTrailsManager:(MMTrailsManager *)trailsManager {
     self = [super init];
     if (self) {
-        self ->trailsHolder = trailsHolder;
+        self->trailsManager = trailsManager;
         self->previousEventId = @"";
     }
     return self;
@@ -19,14 +19,15 @@
 
 - (MMTrailEvent *)createWithName:(NSString *)eventName
                      eventParams:(NSDictionary *)eventParams {
-
-    MMTrail *currentTrail = [self->trailsHolder getCurrentTrail];
-
+    
+    MMTrail *currentTrail = [self->trailsManager getLatestTrail];
+    
     
     NSString *trailId = currentTrail == nil ? nil : [currentTrail trailId];
     NSString *eventId = [self createNewId];
     
     NSMutableDictionary *handledEventParams = [NSMutableDictionary dictionaryWithDictionary:eventParams];
+    
     [handledEventParams setValue:trailId forKey:@"trail_id"];
     [handledEventParams setValue:eventId forKey:@"event_id"];
     [handledEventParams setValue:self->previousEventId forKey:@"prev_event_id"];
@@ -38,6 +39,9 @@
     event.eventName = eventName;
     event.eventParams = handledEventParams;
     event.trailId = trailId;
+    event.eventId = eventId;
+//    NSLog(@"@@ handledEventParams %@ %@",handledEventParams, eventParams);
+    
     
     return event;
 }

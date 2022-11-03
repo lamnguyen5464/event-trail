@@ -6,16 +6,16 @@
 
 #import <Foundation/Foundation.h>
 #import "MMTrailEvent.h"
-#import "MMTrailsHolder.h"
+#import "MMTrailsManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MMTrailEventCreator: NSObject {
-    MMTrailsHolder *trailsHolder;
     NSString *previousEventId;
+    MMTrailsManager *trailsManager;
 }
 
-- (instancetype)initWithTrailsHolder:(MMTrailsHolder *)trailsHolder;
+- (instancetype)initWithTrailsManager:(MMTrailsManager *)trailsManager;
 
 - (MMTrailEvent *)createWithName:(NSString *)eventName
                      eventParams:(NSDictionary *)eventParams;

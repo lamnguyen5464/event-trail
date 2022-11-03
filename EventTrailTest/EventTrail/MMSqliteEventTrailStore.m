@@ -24,7 +24,10 @@
 
 - (id<SqliteExecutionResult>)saveEvent:(MMStorePersistedTrailEvent *)event {
     
-    NSString *insertSQLString = [NSString stringWithFormat:@"INSERT INTO TRAIL_EVENTS(event_id, trail_id, event_name, event_params) VALUES ('%@', '%@', '%@', '%@');", event.eventId, event.trailId, event.eventName, event.eventBundle];
+    
+    NSLog(@"[TrailEvent] save event: eventName: %@ | trailId: %@ | bundle: %@", event.eventName, event.trailId, event.eventBundle);
+    
+    NSString *insertSQLString = [NSString stringWithFormat:@"INSERT INTO TRAIL_EVENTS(event_id, trail_id, event_name, event_bundle) VALUES ('%@', '%@', '%@', '%@');", event.eventId, event.trailId, event.eventName, event.eventBundle];
     
     const char* insertSQL = [insertSQLString UTF8String];
     sqlite3_stmt *insertStmt = nil;
@@ -33,9 +36,11 @@
         if (sqlite3_step(insertStmt) == SQLITE_DONE) {
             result = [SqliteExecutionSuccess shared];
         } else {
+            NSLog(@"[TrailEvent] Failed to save event: %@ %@ %@ %@", event.eventId, event.trailId, event.eventName, event.eventBundle);
             result = [[SqliteExecutionFailure alloc] initWithException:[self createSqliteExceptionWithReason:[NSString stringWithFormat:@"[TrailEvent] Failed to save event: %@", event.eventBundle]]];
         }
     } else {
+        NSLog(@"[TrailEvent] Wrong insert statement: %@", event.eventBundle);
         result = [[SqliteExecutionFailure alloc] initWithException:[self createSqliteExceptionWithReason:[NSString stringWithFormat:@"[TrailEvent] Wrong insert statement: %@", insertSQLString]]];
     }
     sqlite3_finalize(insertStmt);
@@ -44,8 +49,7 @@
 
 - (id<SqliteExecutionResult>)saveTrail:(MMTrail *)trail {
     NSString *insertSQLString = [NSString stringWithFormat:@"INSERT INTO TRAILS(trail_id, trail_session, tracking_session_id, app_id, level, entry_scope, entry_type, entry_app_id_trigger, entry_screen_name, entry_parent_trail_id, exit_by, exit_screen) VALUES ('%@', '%@', '%@', '%@', '%ld', '%@', '%@', '%@', '%@', '%@', '%@', '%@');", trail.trailId, trail.trailSession, trail.trackingSessionId, trail.appId, (long)trail.level, trail.entryScope, trail.entryType, trail.entryAppIdTrigger, trail.entryScreenName, trail.entryParentTrailId, trail.exitBy, trail.exitScreen];
-    
-    
+    NSLog(@"[TrailEvent] save trail: %@", insertSQLString);
     
     const char* insertSQL = [insertSQLString UTF8String];
     sqlite3_stmt *insertStmt = nil;
@@ -70,7 +74,7 @@
         [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
     }
     
-    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session IN (%@) ORDER BY create_at", [parsedSessionIds componentsJoinedByString:@", "]];
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session IN (%@) ORDER BY id", [parsedSessionIds componentsJoinedByString:@", "]];
     
     return [self queryEventsByStatement:querySQLString];
 }
@@ -82,18 +86,30 @@
         [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
     }
     
-    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session NOT IN (%@) ORDER BY create_at", [parsedSessionIds componentsJoinedByString:@", "]];
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAIL_EVENTS.* FROM TRAIL_EVENTS JOIN TRAILS ON TRAIL_EVENTS.trail_id = TRAILS.trail_id WHERE TRAILS.trail_session NOT IN (%@) ORDER BY id", [parsedSessionIds componentsJoinedByString:@", "]];
     
     return [self queryEventsByStatement:querySQLString];
 }
 
+- (id<SqliteExecutionResult>)queryTrailsNotInSessionIds:(NSArray<NSString *> *)sessionIds {
+    NSMutableArray<NSString *> *parsedSessionIds = [NSMutableArray new];
+     
+    for (NSString *sessionId in sessionIds) {
+        [parsedSessionIds addObject:[NSString stringWithFormat:@"'%@'", sessionId]];
+    }
+    
+    NSString *querySQLString = [NSString stringWithFormat:@"SELECT TRAILS.* FROM TRAILS  WHERE TRAILS.trail_session NOT IN (%@) ORDER BY id", [parsedSessionIds componentsJoinedByString:@", "]];
+    
+    return [self queryTrailsByStatement:querySQLString];
+}
+
 
 - (id<SqliteExecutionResult>)queryAllEvents {
-    return [self queryEventsByStatement:@"SELECT * FROM TRAIL_EVENTS ORDER BY create_at"];
+    return [self queryEventsByStatement:@"SELECT * FROM TRAIL_EVENTS ORDER BY id"];
     
 }
 - (id<SqliteExecutionResult>)queryAllTrails {
-    return [self queryTrailsByStatement:@"SELECT TRAILS.id, TRAILS.trail_id,  TRAILS.trail_session, TRAILS.tracking_session_id, TRAILS.app_id, TRAILS.level, TRAILS.entry_scope, TRAILS.entry_type, TRAILS.entry_app_id_trigger, TRAILS.entry_screen_name, TRAILS.entry_parent_trail_id, TRAILS.exit_by, TRAILS.exit_screen FROM TRAILS;"];
+    return [self queryTrailsByStatement:@"SELECT TRAILS.* FROM TRAILS;"];
 }
 
 
@@ -209,9 +225,9 @@
     return result;
 }
 
-NSString* const SQLITE_CREATE_TABLE_EVENT_STATEMENT = @"CREATE TABLE IF NOT EXISTS TRAIL_EVENTS (id INTEGER PRIMARY KEY AUTOINCREMENT, event_id TEXT UNIQUE, trail_id TEXT NOT NULL, event_name TEXT NOT NULL, event_params TEXT, create_at DATETIME DEFAULT CURRENT_TIMESTAMP);";
+NSString* const SQLITE_CREATE_TABLE_EVENT_STATEMENT = @"CREATE TABLE IF NOT EXISTS TRAIL_EVENTS (id INTEGER PRIMARY KEY AUTOINCREMENT, event_id TEXT UNIQUE, trail_id TEXT NOT NULL, event_name TEXT NOT NULL, event_bundle TEXT, create_at DATETIME DEFAULT CURRENT_TIMESTAMP);";
 
-NSString* const SQLITE_CREATE_TABLE_TRAIL_STATEMENT = @"CREATE TABLE IF NOT EXISTS TRAILS(id INTEGER PRIMARY KEY AUTOINCREMENT, trail_session TEXT NOT NULL, tracking_session_id TEXT NOT NULL, trail_id TEXT UNIQUE, app_id TEXT, level INTEGER, entry_scope TEXT, entry_type TEXT, entry_app_id_trigger TEXT, entry_screen_name TEXT, entry_parent_trail_id TEXT, exit_by TEXT, exit_screen TEXT, create_at DATETIME DEFAULT CURRENT_TIMESTAMP);";
+NSString* const SQLITE_CREATE_TABLE_TRAIL_STATEMENT = @"CREATE TABLE IF NOT EXISTS TRAILS(id INTEGER PRIMARY KEY AUTOINCREMENT, trail_id TEXT UNIQUE, trail_session TEXT NOT NULL, tracking_session_id TEXT NOT NULL, app_id TEXT, level INTEGER, entry_scope TEXT, entry_type TEXT, entry_app_id_trigger TEXT, entry_screen_name TEXT, entry_parent_trail_id TEXT, exit_by TEXT, exit_screen TEXT, create_at DATETIME DEFAULT CURRENT_TIMESTAMP);";
 
 - (void) createDatabase {
     if (sqlite3_open_v2([self getDatabsePath], &(self->database), SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK) {
@@ -243,7 +259,7 @@ NSString* const SQLITE_CREATE_TABLE_TRAIL_STATEMENT = @"CREATE TABLE IF NOT EXIS
 
 - (const char *) getDatabsePath {
     NSURL *urlDirectory = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask][0];
-    NSURL *fileUrl = [urlDirectory URLByAppendingPathComponent:@"trail_events_v0.sqlite"];
+    NSURL *fileUrl = [urlDirectory URLByAppendingPathComponent:@"trail_events.sqlite"];
     return [[fileUrl path] UTF8String];
 }
 

@@ -43,7 +43,7 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
 - (void)flushEvents:(MMEventPushingScheduler *)_self {
     
     NSArray<MMStorePersistedTrailEvent *> *events = [_self queryEvents:_self];
-    if (!events) {
+    if (!events || !events.count) {
         return;
     }
     
@@ -51,11 +51,19 @@ int const MMAnalyticsDefaultFlushIntervalMillis = 15000;
     // TODO: handle pushing status
     
     NSMutableArray<NSString *> *eventIds = [NSMutableArray new];
-    for (MMTrailEvent *event in events) {
+    NSMutableArray<NSString *> *closedTrailIds = [NSMutableArray new];
+    for (MMStorePersistedTrailEvent *event in events) {
+        NSLog(@"eventId: %@ %@ %@", event.eventId, event.eventName, event.eventBundle);
+        if (!event) continue;
         [eventIds addObject:event.eventId];
+        if ([event.eventName isEqual: @"trail_end"]) {
+            [closedTrailIds addObject:event.trailId];
+        }
     }
-    
+    NSLog(@"[TrailEvent] delete events with ids: %@", eventIds);
+    NSLog(@"[TrailEvent] delete trails with ids: %@", closedTrailIds);
     [_self->store deleteEventsByEventIds:eventIds];
+    [_self->store deleteTrailsByTrailIds:closedTrailIds];
    
 }
 

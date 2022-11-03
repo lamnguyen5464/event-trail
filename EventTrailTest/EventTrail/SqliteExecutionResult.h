@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSArray<MMStorePersistedTrailEvent *> * data;
 @end
 
+
 #pragma mark - SqliteTrailQuerySuccess
 @interface SqliteTrailQuerySuccess: NSObject<SqliteExecutionResult>
 - (instancetype)initWithData:(NSArray<MMTrail *> *)data;

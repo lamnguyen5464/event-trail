@@ -1,5 +1,5 @@
 //
-//  MMStartTrailPersister.h
+//  MMTrailPersister.h
 //
 //  Created by lam.nguyen5 on 10/28/22.
 //
@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MMStartTrailPersister: NSObject<MMPersister> {
+@interface MMTrailPersister: NSObject<MMPersister> {
     dispatch_queue_t taskQueue;
     id<MMEventTrailStore> store;
     id<MMPersister> eventPersister;

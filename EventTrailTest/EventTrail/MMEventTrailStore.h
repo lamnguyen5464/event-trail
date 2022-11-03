@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id<SqliteExecutionResult>)queryEventsBySessionIds:(NSArray<NSString *> *)sessionIds;
 - (id<SqliteExecutionResult>)queryEventsNotInSessionIds:(NSArray<NSString *> *)sessionIds;
+- (id<SqliteExecutionResult>)queryTrailsNotInSessionIds:(NSArray<NSString *> *)sessionIds;
 - (id<SqliteExecutionResult>)queryAllEvents;
 - (id<SqliteExecutionResult>)queryAllTrails;
 

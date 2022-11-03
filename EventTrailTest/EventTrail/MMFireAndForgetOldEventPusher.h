@@ -5,12 +5,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMStorePersistedTrailEvent.h"
 #import "MMEventTrailIntegration.h"
 #import "MMTrailEventCreator.h"
 #import "MMEventTrailPusher.h"
 #import "MMEventTrailStore.h"
 #import "MMAppSession.h"
-#import "MMStorePersistedTrailEvent.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
     id<MMEventTrailStore> store;
     MMTrailEventCreator *trailEventCreator;
     MMEventTrailPusher *pusher;
-    
 }
 
 - (instancetype)initWithStore:(id<MMEventTrailStore>)store

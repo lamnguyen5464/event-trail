@@ -30,25 +30,16 @@ typedef enum {
     
     NSString *payload = [NSString stringWithFormat:@"[%@]", [parsedEvents componentsJoinedByString:@","]];
     
-    NSLog(@"[TrailEvent] push events: %@", payload);
+    NSLog(@"[TrailEvent] push events: %lu | %@", (unsigned long)events.count, payload);
     
-    [self __sendsEventsToServerInternal:payload];
     
-    return YES;
-}
-
-- (void)sendEventsToServer
-{
-
-    NSString* payload = @""; // [self buildPayload:persistedEvents.events];
-  if (payload && payload.length > 0 && ![payload isEqualToString:@"[]"]) {
     int status = [self __sendsEventsToServerInternal:payload];
     if (status == NETWORK_SUCCESS) {
 //      [MMLogger logDebug:@"MMEventPusher sendEventsToServer: SUCCEEDED"];
     } else {
 //      [MMLogger logDebug:@"MMEventPusher sendEventsToServer: FAILED"];
     }
-  }
+    return status == NETWORK_SUCCESS;
 }
 
 - (int) __sendsEventsToServerInternal:(NSString*)payload
@@ -56,11 +47,11 @@ typedef enum {
   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
   
 //  NSString* endpointURL = [_configs.baseURL stringByAppendingString:@"/v2/send"];
-    NSString* endpointURL = @"https://miniapp.dev.mservice.io/rigver-appversion/v1/features?last_update=0";// _configs.apiEndpoint;
+    NSString* endpointURL = @"https://sense.mservice.io/apenpup-api/v4/send";// _configs.apiEndpoint;
 //  [MMLogger logDebug:[[NSString alloc] initWithFormat:@"endPointToFlush %@", endpointURL]];
   
   NSMutableURLRequest *urlRequest = [[NSMutableURLRequest alloc] initWithURL:[[NSURL alloc] initWithString:endpointURL]];
-  [urlRequest setHTTPMethod:@"GET"];
+  [urlRequest setHTTPMethod:@"POST"];
   [urlRequest addValue:@"Application/json" forHTTPHeaderField:@"Content-Type"];
   [urlRequest addValue:@"Application/json" forHTTPHeaderField:@"Accept"];
 //  [urlRequest addValue:[[NSString alloc] initWithFormat:@"Bearer %@", _configs.apiToken] forHTTPHeaderField:@"Authorization"];
@@ -81,7 +72,8 @@ typedef enum {
       if (200 == httpResponse.statusCode) {
           respStatus = NETWORK_SUCCESS;
       } else {
-//        NSString *errorResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSString *errorResponse = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+          NSLog(@"[TrailEvent] error: %@", errorResponse);
         respStatus = NETWORK_ERROR;
 //        [MMLogger logError:[[NSString alloc] initWithFormat:@"ServerError: %@", errorResponse]];
       }

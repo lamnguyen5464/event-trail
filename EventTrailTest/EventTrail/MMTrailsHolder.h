@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MMTrailsHolder: NSObject
 
-- (MMTrail *)getCurrentTrail;
+- (MMTrail *)getLatestTrail;
 - (void)addTrail:(MMTrail *)trail;
 - (MMTrail *)removeCurrentTrail;
 
