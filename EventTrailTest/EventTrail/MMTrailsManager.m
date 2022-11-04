@@ -31,14 +31,9 @@
     
     return self;
 }
-                
-- (MMTrail *)createWithAppId:(NSString *)appId
-                  entryScope:(NSString *)entryScope
-                   entryType:(NSString *)entryType
-           entryAppIdTrigger:(NSString *)entryAppIdTrigger
-             entryScreenName:(NSString *)entryScreenName
-                      exitBy:(NSString *)exitBy
-                  exitScreen:(NSString *)exitScreen {
+
+- (MMTrailOpenData *)createWithMeta:(MMTrailOpenMeta *)meta {
+    MMTrailOpenData *trailOpenData = [MMTrailOpenData new];
     MMTrail *parentTrail = [self getLatestTrail];
     MMTrail *newTrail = [MMTrail new];
     
@@ -46,21 +41,20 @@
     newTrail.level = isRootTrail ? 0 : (parentTrail.level + 1);
     newTrail.trailId = [self createNewId];
     newTrail.trailSession = [MMAppSession getCurrentAppSession];
-    newTrail.entryParentTrailId = isRootTrail ? @"" : parentTrail.trailId;
+    newTrail.parentTrailId = isRootTrail ? @"" : parentTrail.trailId;
     // TODO: get TrackingSessionKey from KMM
     newTrail.trackingSessionId = @"";
-    newTrail.appId = appId;
-    newTrail.entryScope = entryScope;
-    newTrail.entryType = entryType;
-    newTrail.entryAppIdTrigger = entryAppIdTrigger;
-    newTrail.entryScreenName = entryScreenName;
-    newTrail.exitBy = exitBy;
-    newTrail.exitScreen = exitScreen;
+    
+    trailOpenData.trailData = newTrail;
+    trailOpenData.appId = meta.appId;
+    trailOpenData.entryScope = meta.entryScope;
+    trailOpenData.entryType = meta.entryType;
+    trailOpenData.entryAppIdTrigger = meta.entryAppIdTrigger;
+    trailOpenData.entryScreenName = meta.entryScreenName;
     
     [self addTrail:newTrail];
- 
-    return newTrail;
     
+    return trailOpenData;
 }
 
 

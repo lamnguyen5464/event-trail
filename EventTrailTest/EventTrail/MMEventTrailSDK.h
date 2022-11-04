@@ -13,6 +13,8 @@
 #import "MMFireAndForgetOldEventPusher.h"
 #import "MMEventTrailPusher.h"
 #import "MMEventPushingScheduler.h"
+#import "MMTrailFinishMeta.h"
+#import "MMTrailOpenMeta.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,6 +48,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)closeTrailWithAppId:(NSString *)appId
                  screenName:(NSString *)screenName
                       endBy:(NSString *)endBy;
+
+- (MMTrail *)openTrailWithMeta:(MMTrailOpenMeta *)meta;
+
+- (void)finishTrailWithMeta:(MMTrailFinishMeta *)meta;
 
 - (void)applicationDidEnterBackground;
 - (void)applicationWillEnterForeground;

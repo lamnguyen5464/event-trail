@@ -9,6 +9,7 @@
 #import "MMSqliteEventTrailStore.h"
 #import "MMPersister.h"
 #import "MMTrailEventCreator.h"
+#import "MMTrailOpenData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

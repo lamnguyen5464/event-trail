@@ -104,7 +104,13 @@
     for (MMTrail *trail in trails) {
         if (!trail || [closedTrailIds containsObject:trail.trailId]) continue;
         
-        MMTrailEvent *event = [_self->trailEventCreator createWithName:@"trail_end" eventParams:[NSDictionary dictionary]];
+        NSDictionary *eventParams = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     @"app_kill", @"exit_point.end_by",
+                                     @"", @"screen_name",
+                                     @"", @"appId",
+                                     nil];
+        
+        MMTrailEvent *event = [_self->trailEventCreator createWithName:@"trail_end" eventParams:eventParams];
         [listEvents addObject:[event toPersistModel]];
     }
     

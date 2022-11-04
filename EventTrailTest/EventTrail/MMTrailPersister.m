@@ -21,24 +21,25 @@
     return self;
 }
 
-- (void)persist:(MMTrail *)data {
-    if (!data) return;
-    NSLog(@"[TrailEvent] persist trail: %@", data.trailId);
+- (void)persist:(MMTrailOpenData *)data {
+    if (!data || !data.trailData) return;
+    NSLog(@"[TrailEvent] persist trail: %@", data.trailData.trailId);
     __weak __typeof(self) weakSelf = self;
     dispatch_async(self->taskQueue, ^{
         __strong __typeof(weakSelf) strongSelf = weakSelf;
+        MMTrail *trailData = data.trailData;
         NSDictionary *eventParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                     data.trailId, @"trail_id",
-                                     @(data.level), @"level",
+                                     trailData.trailId, @"trail_id",
+                                     @(trailData.level), @"level",
                                      data.entryScope, @"entry_point.scope",
                                      data.entryType, @"entry_point.type",
                                      data.entryAppIdTrigger, @"entry_point.app_id_trigger",
                                      data.entryScreenName, @"entry_point.screen_name",
-                                     data.entryParentTrailId, @"entry_point.parent_id",
+                                     trailData.parentTrailId, @"entry_point.parent_id",
                                      nil];
 
         MMTrailEvent *event = [strongSelf->eventCreator createWithName:@"trail_start" eventParams:eventParams];
-        [strongSelf->store saveTrail:data];
+        [strongSelf->store saveTrail:trailData];
         [strongSelf->eventPersister persist:event];
     });
 }

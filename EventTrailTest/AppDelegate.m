@@ -18,29 +18,41 @@
     
     NSLog(@"AppSession: %@", [MMAppSession getCurrentAppSession]);
     
-    [[MMEventTrailSDK sharedSDK] openTrailWithAppId:@"vn.momo.1"
-                                              entryScope:@"scope_1"
-                                               entryType:@"type_1"
-                                       entryAppIdTrigger:@"app.id.trigger.01"
-                                         entryScreenName:@"screen_name_01"];
+    MMTrailOpenMeta *meta = [MMTrailOpenMeta new];
+    meta.appId = @"vn.momo.1";
+    meta.entryScope = @"scope_1";
+    meta.entryType = @"type_1";
+    meta.entryAppIdTrigger = @"app.id.trigger.01";
+    meta.entryScreenName = @"screen_name_01";
+    
+    [[MMEventTrailSDK sharedSDK] openTrailWithMeta:meta];
+    
     
     for(int i = 0; i < 10; i++) {
         [[MMEventTrailSDK sharedSDK] trackEvent:[NSString stringWithFormat:@"event_name_%d", i]
                                          eventParams:[NSDictionary dictionaryWithObjectsAndKeys:@([MMUtils getTimeStampLong]), @"time", nil]];
     }
     
-    [[MMEventTrailSDK sharedSDK] openTrailWithAppId:@"vn.momo.2"
-                                              entryScope:@"scope_2"
-                                               entryType:@"type_2"
-                                       entryAppIdTrigger:@"app.id.trigger.02"
-                                         entryScreenName:@"screen_name_02"];
-    
+    MMTrailOpenMeta *meta2 = [MMTrailOpenMeta new];
+    meta2.appId = @"vn.momo.2";
+    meta2.entryScope = @"scope_2";
+    meta2.entryType = @"type_2";
+    meta2.entryAppIdTrigger = @"app.id.trigger.02";
+    meta2.entryScreenName = @"screen_name_02";
+
+    [[MMEventTrailSDK sharedSDK] openTrailWithMeta:meta2];
+     
     for(int i = 11; i < 20; i++) {
         [[MMEventTrailSDK sharedSDK] trackEvent:[NSString stringWithFormat:@"event_name_%d", i]
                                          eventParams:[NSDictionary dictionaryWithObjectsAndKeys:@([MMUtils getTimeStampLong]), @"time", nil]];
     }
     
-    [[MMEventTrailSDK sharedSDK] closeTrailWithAppId:@"vn.momo.2" screenName:@"screenNameEnd" endBy:@"endBy"];
+    MMTrailFinishMeta *finishTrailMeta = [MMTrailFinishMeta new];
+    finishTrailMeta.appId = @"vn.momo.2";
+    finishTrailMeta.exitScreen = @"screenNameEnd";
+    finishTrailMeta.exitBy = @"endBy2";
+    [[MMEventTrailSDK sharedSDK] finishTrailWithMeta:finishTrailMeta];
+    
     
     // Override point for customization after application launch.
     return YES;

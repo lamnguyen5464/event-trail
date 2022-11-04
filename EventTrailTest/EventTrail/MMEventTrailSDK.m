@@ -69,25 +69,17 @@ static MMEventTrailSDK *sharedSDK = nil;
     [self->eventPersister persist:event];
 }
 
-
-- (MMTrail *)openTrailWithAppId:(NSString *)appId
-                       entryScope:(NSString *)entryScope
-                        entryType:(NSString *)entryType
-                entryAppIdTrigger:(NSString *)entryAppIdTrigger
-                  entryScreenName:(NSString *)entryScreenName {
-    MMTrail *trail = [self->trailsManager createWithAppId:appId entryScope:entryScope entryType:entryType entryAppIdTrigger:entryAppIdTrigger entryScreenName:entryScreenName exitBy:@"" exitScreen:@""];
-    [self->trailPersister persist:trail];
-    return trail;
+- (MMTrailOpenData *)openTrailWithMeta:(MMTrailOpenMeta *)meta {
+    MMTrailOpenData *trailOpenData = [self->trailsManager createWithMeta:meta];
+    [self->trailPersister persist:trailOpenData];
+    return trailOpenData;
 }
 
-- (void)closeTrailWithAppId:(NSString *)appId
-                 screenName:(NSString *)screenName
-                      endBy:(NSString *)endBy {
-    
+- (void)finishTrailWithMeta:(MMTrailFinishMeta *)meta {
     NSDictionary *eventParams = [NSDictionary dictionaryWithObjectsAndKeys:
-                                 endBy, @"exit_point.end_by",
-                                 screenName, @"screen_name",
-                                 appId, @"appId",
+                                 meta.exitBy, @"exit_point.end_by",
+                                 meta.exitScreen, @"screen_name",
+                                 meta.appId, @"appId",
                                  nil];
     MMTrailEvent *event = [self->eventCreator createWithName:@"trail_end" eventParams:eventParams];
     [self->eventPersister persist:event];

@@ -15,15 +15,8 @@
         self->_trailId = @"";
         self->_trailSession = @"";
         self->_trackingSessionId = @"";
-        self->_appId = @"";
+        self->_parentTrailId = @"";
         self->_level = 0;
-        self->_entryScope = @"";
-        self->_entryType = @"";
-        self->_entryAppIdTrigger = @"";
-        self->_entryScreenName = @"";
-        self->_entryParentTrailId = @"";
-        self->_exitBy = @"";
-        self->_exitScreen = @"";
     }
     return self;
 }

@@ -7,19 +7,14 @@
 #import <Foundation/Foundation.h>
 #import "MMTrail.h"
 #import "MMAppSession.h"
+#import "MMTrailOpenMeta.h"
+#import "MMTrailOpenData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MMTrailsManager: NSObject
 
-- (MMTrail *)createWithAppId:(NSString *)appId
-                  entryScope:(NSString *)entryScope
-                   entryType:(NSString *)entryType
-           entryAppIdTrigger:(NSString *)entryAppIdTrigger
-             entryScreenName:(NSString *)entryScreenName
-                      exitBy:(NSString *)exitBy
-                  exitScreen:(NSString *)exitScreen;
-
+- (MMTrailOpenData *)createWithMeta:(MMTrailOpenMeta *)meta;
 
 - (MMTrail *)getLatestTrail;
 - (MMTrail *)removeLatestTrail;
